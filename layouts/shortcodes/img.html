@@ -1,0 +1,15 @@
+{{ $align := .Get "align" | default "center" }}
+{{ $width := .Get "width" | default "100%" }}
+
+<div style="text-align: {{ if eq $align "center" }}center{{ else }}{{ $align }}{{ end }};">
+  <figure class="img-figure" style="display: inline-block; width: {{ $width }};">
+    <img 
+      src="{{ .Get "src" }}" 
+      alt="{{ .Get "alt" }}"
+      style="width: 100%;"
+    >
+    {{ if .Get "caption" }}
+    <figcaption>{{ .Get "caption" }}</figcaption>
+    {{ end }}
+  </figure>
+</div>
