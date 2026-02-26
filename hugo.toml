@@ -1,0 +1,32 @@
+baseURL = "https://dans-le-mille.fr/"
+languageCode = "fr-FR"
+title = "Dans le mille"
+theme = "PaperMod"
+  
+[params]
+  description = "Documentation technique sur le tir à l'arc et l'arc compound"
+  author = "Vincent"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+
+[menu]
+  [[menu.main]]
+    name = "Articles"
+    url = "/articles/"
+    weight = 1
+  [[menu.main]]
+    name = "Calculateurs"
+    url = "/calculateurs/"
+    weight = 2
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
