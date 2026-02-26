@@ -11,6 +11,8 @@ theme = "PaperMod"
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   customCSS = ["css/custom.css"]
+  ShowToc = true
+  TocOpen = true
 
 [menu]
   [[menu.main]]
