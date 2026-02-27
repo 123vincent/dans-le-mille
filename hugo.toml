@@ -5,14 +5,16 @@ theme = "PaperMod"
   
 [params]
   description = "Documentation technique sur le tir à l'arc et l'arc compound"
-  author = "Vincent"
+  author = "Vincent B."
   defaultTheme = "auto"
-  ShowReadingTime = true
+  ShowReadingTime = false
+  ShowLastMod = true
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   customCSS = ["css/custom.css"]
   ShowToc = true
   TocOpen = true
+  math = true
 
 [menu]
   [[menu.main]]
@@ -33,3 +35,8 @@ theme = "PaperMod"
   section = ["HTML"]
   taxonomy = ["HTML"]
   term = ["HTML"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

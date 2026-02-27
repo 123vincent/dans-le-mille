@@ -1,7 +1,7 @@
 ---
 title: "Arc à poulies / Compound — comment ça marche ?"
 date: 2016-11-11
-lastmod: 2016-11-11
+lastmod: 2026-02-26
 tags: ["compound", "came", "module", "cables", "yoke", "allonge", "let-off"]
 description: "Principe de fonctionnement de l'arc à poulies ou compound : système de cames, let-off, allonge, yoke et écarteur de câbles."
 ---
@@ -91,5 +91,5 @@ Ses avantages en font aussi ses inconvénients :
 
 ## Références
 
-[^1]: Allen Holless W., [Archery bow with draw force multiplying attachments](https://www.google.com/patents/US3486495), brevet US3486495. Consulté le 10/10/2016.
-[^2]: Wikipedia, [Levier (mécanique)](https://fr.wikipedia.org/wiki/Levier_), consulté le 15/02/2016.
+[^1]: Allen Holless W., [Archery bow with draw force multiplying attachments](https://www.google.com/patents/US3486495), brevet US3486495. Consulté le 26.02.2026.
+[^2]: Wikipedia, [Levier (mécanique)](https://fr.wikipedia.org/wiki/Levier_), consulté le 26.02.2026.
