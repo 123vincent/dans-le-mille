@@ -1,11 +1,49 @@
+/* Taille de police et interligne global */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+body, .post-content {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Espacement entre paragraphes */
+.post-content p {
+  margin-bottom: 0.6em;
+  line-height: 1.4;
+}
+
+/* Interligne et espacement des listes */
+.post-content ul,
+.post-content ol {
+  margin-bottom: 0.6em;
+  line-height: 1.4;
+}
+
+.post-content li {
+    margin-top: 0;
+}
+
+/* Espacement des titres */
+.post-content h2 {
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+}
+
+.post-content h3 {
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+
 .img-figure {
   margin: 1rem 0;
 }
 
 .img-center {
-  display: block
-  margin-left: auto
-  margin-right: auto
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .img-left {
