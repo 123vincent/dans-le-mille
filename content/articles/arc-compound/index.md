@@ -1,5 +1,6 @@
 ---
 title: "Arc à poulies / Compound — comment ça marche ?"
+weight: 1
 date: 2016-11-11
 lastmod: 2026-02-26
 tags: ["compound", "came", "module", "cables", "yoke", "allonge", "let-off"]

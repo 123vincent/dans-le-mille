@@ -1,5 +1,6 @@
 ---
 title: "Calculer l'efficacité de son arc"
+weight: 2
 date: 2016-10-10
 lastmod: 2026-02-27
 tags: ["efficacité", "énergie", "vitesse", "IBO"]
