@@ -1,0 +1,241 @@
+<!-- Shortcode : Calculateur efficacité de l'arc
+     Dépendances : Chart.js, vincentb.js, calc-efficacite-arc.js
+-->
+
+<!-- ── Styles spécifiques au calculateur ──────────────────────────────────── -->
+<style>
+.calc-section {
+    margin-bottom: 2.5rem;
+}
+.calc-form {
+    background: var(--code-bg, #f2f2f2);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.calc-form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.calc-form .unite {
+    font-weight: 400;
+    color: var(--secondary, #666);
+    font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border, #ccc);
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.calc-form input.input-error {
+    border-color: #c0392b;
+}
+.calc-form .error {
+    margin-top: 0.5rem;
+    color: #c0392b;
+    font-size: 0.88rem;
+    min-height: 1.2em;
+}
+.calc-form button {
+    margin-top: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--primary, #333);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.calc-form button:hover {
+    opacity: 0.85;
+}
+
+/* Bloc résultats : caché par défaut, révélé via .visible */
+.calc-output {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease;
+    background: var(--entry, #fafafa);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.calc-output.visible {
+    max-height: 2000px;
+    opacity: 1;
+}
+.calc-output-inner {
+    padding: 1.2rem 1.5rem;
+}
+.btclose {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: #c0392b;
+    user-select: none;
+}
+.btclose::before {
+    content: "✕";
+}
+.calc-output table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+.calc-output th, .calc-output td {
+    border: 1px solid var(--border, #ccc);
+    padding: 0.3rem 0.6rem;
+    text-align: right;
+}
+.calc-output th {
+    background: var(--entry, #eee);
+    text-align: center;
+}
+.calc-output dl { margin: 0.3rem 0; }
+.calc-output dd { margin-left: 1rem; }
+
+/* Titres sans balises h2/h3 pour éviter l'indexation TOC */
+.calc-h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 1.2rem 0 0.6rem 0;
+    line-height: 1.3;
+}
+.calc-h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 1rem 0 0.4rem 0;
+    line-height: 1.3;
+}
+.chart-wrapper {
+    position: relative;
+    max-width: 560px;
+    margin-top: 1rem;
+}
+</style>
+
+<!-- ── Formulaire 1 : Energie statique ────────────────────────────────────── -->
+<div class="calc-section">
+<form name="form_1" id="form_1" autocomplete="off" class="calc-form">
+    <h2 id="energie_statique">Énergie statique</h2>
+    <p>Résultats livrés&nbsp;:</p>
+    <ul>
+        <li>Tableau de calcul</li>
+        <li>Énergie accumulée</li>
+        <li>Courbe «&nbsp;force&nbsp;/ allonge&nbsp;»</li>
+    </ul>
+    <p>Respecter les unités indiquées et faire la conversion si nécessaire.<br>
+    (Exemple&nbsp;: 71&nbsp;cm × 0,3937 = 28&nbsp;pouces)</p>
+
+    <label for="f1_field1">
+        Band <span class="unite">[inch = 1&nbsp;cm × 0,3937] / Brace Height [inch]</span>
+    </label>
+    <input name="field_1" id="f1_field1" type="text" value="7">
+
+    <label for="f1_field2">
+        Allonge <span class="unite">[inch = 1&nbsp;cm × 0,3937] / True Draw Length [inch]</span>
+    </label>
+    <input name="field_2" id="f1_field2" type="text" value="28">
+
+    <label for="f1_field3">
+        Forces <span class="unite">[lbs = 1&nbsp;kg × 2,20462] / Draw Force [lbs]</span>
+    </label>
+    <input name="field_3" id="f1_field3" type="text"
+           value="0.4, 18.2, 35.3, 45.8, 48.5, 49.0, 48.5, 44.5, 33.3, 13.5">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_1">Calcul de l'énergie</button>
+</form>
+
+<!-- Bloc résultats 1 -->
+<div id="output_form_1" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Énergie statique <span id="close_output_form_1" class="btclose"></span></div>
+
+        <div class="calc-h3">Tableau de calcul</div>
+        <p id="energy_tab"></p>
+
+        <div class="calc-h3">Énergie accumulée</div>
+        <p id="energy_value"></p>
+
+        <div class="calc-h3">Courbe Force / Allonge</div>
+        <div class="chart-wrapper">
+            <canvas id="figure_1"></canvas>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ── Formulaire 2 : Performances de tir ─────────────────────────────────── -->
+<div class="calc-section">
+<form name="form_2" id="form_2" autocomplete="off" class="calc-form">
+    <h2 id="performances_de_tir">Performances de tir</h2>
+    <p>Résultats livrés&nbsp;:</p>
+    <ul>
+        <li>Énergie cinétique</li>
+        <li>Efficacité de l'arc</li>
+        <li>Masse virtuelle</li>
+        <li>Tableau de configuration&nbsp;: poids – vitesse – efficacité</li>
+    </ul>
+    <p>Respecter les unités indiquées et faire la conversion si nécessaire.<br>
+    (Exemple&nbsp;: 22,7&nbsp;grammes × 15,432 = 350&nbsp;grains)</p>
+
+    <label for="f2_field1">
+        Énergie accumulée <span class="unite">[joule] / Energy [joule = 1&nbsp;in-lb × 0,113]</span>
+    </label>
+    <input name="field_1" id="win" type="text" value="87">
+
+    <label for="f2_field2">
+        Poids de la flèche <span class="unite">[grain = 1&nbsp;gramme × 15,432] / Arrow Weight [gr]</span>
+    </label>
+    <input name="field_2" id="f2_field2" type="text" value="350">
+
+    <label for="f2_field3">
+        Vitesse de la flèche <span class="unite">[fps = 1&nbsp;m/s × 3,281] / Arrow Speed [fps]</span>
+    </label>
+    <input name="field_3" id="f2_field3" type="text" value="270">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_2">Calcul des performances</button>
+</form>
+
+<!-- Bloc résultats 2 -->
+<div id="output_form_2" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Performances de tir <span id="close_output_form_2" class="btclose"></span></div>
+
+        <div class="calc-h3">Configuration</div>
+        <p id="configuration"></p>
+
+        <div class="calc-h3">Énergie cinétique</div>
+        <p id="kinetic_energy"></p>
+
+        <div class="calc-h3">Efficacité de l'arc</div>
+        <p id="bow_efficiency"></p>
+
+        <div class="calc-h3">Masse virtuelle</div>
+        <p id="virtual_mass"></p>
+
+        <div class="calc-h3">Tableau de configuration&nbsp;: poids – vitesse – efficacité</div>
+        <p id="alternative_arrow_weight"></p>
+    </div>
+</div>
+</div>
+
+<!-- ── Dépendances JS ──────────────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="{{ "js/vincentb.js" | relURL }}"></script>
+<script src="{{ "js/calc-efficacite-arc.js" | relURL }}"></script>

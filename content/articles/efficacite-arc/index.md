@@ -117,9 +117,9 @@ $$\sigma = \sqrt{\frac{(\text{mes}_1 - \bar{x})^2 + (\text{mes}_2 - \bar{x})^2 +
 L'efficacité réelle de l'arc est le rapport entre l'énergie cinétique transmise à la flèche et l'énergie accumulée :
 
 $$\begin{aligned}
-W_{\text{in}} &= 88\,\text{J} \\\\
-W_{\text{out}} &= 77{,}12\,\text{J} \\\\
-\text{Eff.}_{\text{arc}} &= \frac{W_{\text{out}}}{W_{\text{in}}} \times 100 = \frac{77{,}12}{88} \times 100 = 87{,}6\,\%
+W_{in} &= 88\,\text{J} \\\\
+W_{out} &= 77{,}12\,\text{J} \\\\
+Eff_{arc} &= \frac{W_{out}}{W_{in}} \times 100 = \frac{77{,}12}{88} \times 100 = 87{,}6\,\%
 \end{aligned}$$
 
 ### La masse virtuelle
