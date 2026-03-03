@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Dans le mille</title><link>https://123vincent.github.io/dans-le-mille/</link><description>Recent content on Dans le mille</description><generator>Hugo -- 0.157.0</generator><language>fr-FR</language><lastBuildDate>Mon, 02 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://123vincent.github.io/dans-le-mille/index.xml" rel="self" type="application/rss+xml"/><item><title>Calculateur — Efficacité de l'arc</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/efficacite-arc/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/efficacite-arc/</guid><description>&lt;style&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Dans le mille</title><link>https://123vincent.github.io/dans-le-mille/</link><description>Recent content on Dans le mille</description><generator>Hugo -- 0.157.0</generator><language>fr-FR</language><lastBuildDate>Tue, 03 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://123vincent.github.io/dans-le-mille/index.xml" rel="self" type="application/rss+xml"/><item><title>Calculateur — Efficacité de l'arc</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/efficacite-arc/</link><pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/efficacite-arc/</guid><description>&lt;style&gt;
 .calc-section {
 margin-bottom: 2.5rem;
 }
@@ -116,8 +116,495 @@ position: relative;
 max-width: 560px;
 margin-top: 1rem;
 }
+@media print {
+body * { visibility: hidden !important; }
+.calc-output.visible,
+.calc-output.visible * { visibility: visible !important; }
+.calc-output.visible {
+position: absolute !important;
+top: 0 !important; left: 0 !important;
+width: 100% !important;
+border: none !important;
+max-height: none !important;
+overflow: visible !important;
+opacity: 1 !important;
+}
+.btclose { display: none !important; }
+}
 &lt;/style&gt;
 &lt;div class="calc-section"&gt;
 &lt;form name="form_1" id="form_1" autocomplete="off" class="calc-form"&gt;
 &lt;h2 id="energie_statique"&gt;Énergie statique&lt;/h2&gt;
-&lt;p&gt;Résultats livrés&amp;nbsp;:&lt;/p&gt;</description></item><item><title>Arc à poulies / Compound — comment ça marche ?</title><link>https://123vincent.github.io/dans-le-mille/articles/arc-compound/</link><pubDate>Fri, 11 Nov 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/arc-compound/</guid><description>Principe de fonctionnement de l&amp;#39;arc à poulies ou compound : système de cames, let-off, allonge, yoke et écarteur de câbles.</description></item><item><title>Calculer l'efficacité de son arc</title><link>https://123vincent.github.io/dans-le-mille/articles/efficacite-arc/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/efficacite-arc/</guid><description>Comment évaluer les performances de son arc compound : énergie accumulée, cycle d&amp;#39;hystérésis, énergie cinétique, masse virtuelle et standard IBO.</description></item><item><title>Balistique extérieure — Le vol d'une flèche</title><link>https://123vincent.github.io/dans-le-mille/articles/balistique-exterieure/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/balistique-exterieure/</guid><description>Étude du vol d&amp;#39;une flèche : modèle mathématique, gravité, résistance de l&amp;#39;air, trajectoire parabolique et simulation tableur.</description></item><item><title>Viser bien, viser juste</title><link>https://123vincent.github.io/dans-le-mille/articles/reglage-viseur/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/reglage-viseur/</guid><description>Réglage du viseur sur un arc compound ou classique : alignement, ajustement mécanique, géométrie de visée et calcul de la graduation.</description></item><item><title>Tirer sur un terrain en pente</title><link>https://123vincent.github.io/dans-le-mille/articles/balistique-terrain-pente/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/balistique-terrain-pente/</guid><description>Ajustement du modèle balistique pour un terrain en pente : projection de la pesanteur, rotation de repère, et estimation pratique de la correction de tir.</description></item><item><title>Le scope à la loupe</title><link>https://123vincent.github.io/dans-le-mille/articles/scope-lentille/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/scope-lentille/</guid><description>Analyse optique du système de visée sur un arc compound : champ de vision, vergence, grossissement, image inversée, visette correctrice.</description></item></channel></rss>
+&lt;p&gt;Résultats livrés&amp;nbsp;:&lt;/p&gt;</description></item><item><title>Arc à poulies / Compound — comment ça marche ?</title><link>https://123vincent.github.io/dans-le-mille/articles/arc-compound/</link><pubDate>Fri, 11 Nov 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/arc-compound/</guid><description>Principe de fonctionnement de l&amp;#39;arc à poulies ou compound : système de cames, let-off, allonge, yoke et écarteur de câbles.</description></item><item><title>Calculateur — Balistique extérieure</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/balistique/</link><pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/balistique/</guid><description>&lt;style&gt;
+.calc-section { margin-bottom: 2.5rem; }
+.calc-form {
+background: var(--code-bg, #f2f2f2);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+.calc-form label {
+display: block;
+margin-top: 1rem;
+font-weight: 600;
+font-size: 0.95rem;
+}
+.calc-form .unite {
+font-weight: 400;
+color: var(--secondary, #666);
+font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+display: block;
+width: 100%;
+max-width: 480px;
+margin-top: 0.3rem;
+padding: 0.4rem 0.6rem;
+border: 1px solid var(--border, #ccc);
+border-radius: 4px;
+font-size: 1rem;
+box-sizing: border-box;
+}
+.calc-form input.input-error { border-color: #c0392b; }
+.calc-form .error {
+margin-top: 0.5rem;
+color: #c0392b;
+font-size: 0.88rem;
+min-height: 1.2em;
+}
+.calc-form button {
+margin-top: 1.2rem;
+padding: 0.5rem 1.2rem;
+background: var(--primary, #333);
+color: #fff;
+border: none;
+border-radius: 4px;
+font-size: 1rem;
+cursor: pointer;
+}
+.calc-form button:hover { opacity: 0.85; }
+.calc-output {
+max-height: 0;
+overflow: hidden;
+opacity: 0;
+transition: max-height 0.5s ease, opacity 0.4s ease;
+background: var(--entry, #fafafa);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+margin-bottom: 2rem;
+}
+.calc-output.visible { max-height: 4000px; opacity: 1; }
+.calc-output-inner { padding: 1.2rem 1.5rem; }
+.btclose {
+display: inline-block;
+float: right;
+cursor: pointer;
+font-size: 1.2rem;
+line-height: 1;
+color: #c0392b;
+user-select: none;
+}
+.btclose::before { content: "✕"; }
+.calc-output table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; font-size: 0.9rem; }
+.calc-output th, .calc-output td { border: 1px solid var(--border, #ccc); padding: 0.3rem 0.6rem; text-align: right; }
+.calc-output th { background: var(--entry, #eee); text-align: center; }
+.calc-output dl { margin: 0.3rem 0; }
+.calc-output dd { margin-left: 1rem; }
+.calc-output dl.calc-error dd { color: #c0392b; }
+.calc-h2 { font-size: 1.6rem; font-weight: 700; margin: 1.2rem 0 0.6rem 0; line-height: 1.3; }
+.calc-h3 { font-size: 1.15rem; font-weight: 600; margin: 1rem 0 0.4rem 0; line-height: 1.3; }
+.calc-abbrev p { margin: 0.15rem 0; }
+.calc-abbrev p:first-child { margin-bottom: 0.4rem; }
+.chart-wrapper { position: relative; max-width: 640px; margin-top: 1rem; }
+.ratioWrapper { position: relative; width: 100%; }
+.ratioWrapper canvas { width: 100% !important; }
+@media print {
+body * { visibility: hidden !important; }
+.calc-output.visible,
+.calc-output.visible * { visibility: visible !important; }
+.calc-output.visible {
+position: absolute !important;
+top: 0 !important; left: 0 !important;
+width: 100% !important;
+border: none !important;
+max-height: none !important;
+overflow: visible !important;
+opacity: 1 !important;
+}
+.btclose { display: none !important; }
+}
+&lt;/style&gt;
+&lt;div class="calc-abbrev"&gt;
+&lt;p&gt;&lt;b&gt;Abréviations&amp;nbsp;:&lt;/b&gt;&lt;/p&gt;</description></item><item><title>Calculer l'efficacité de son arc</title><link>https://123vincent.github.io/dans-le-mille/articles/efficacite-arc/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/efficacite-arc/</guid><description>Comment évaluer les performances de son arc compound : énergie accumulée, cycle d&amp;#39;hystérésis, énergie cinétique, masse virtuelle et standard IBO.</description></item><item><title>Calculateur — Balistique sur terrain en pente</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/balistique-terrain-pente/</link><pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/balistique-terrain-pente/</guid><description>&lt;style&gt;
+.calc-section { margin-bottom: 2.5rem; }
+.calc-form {
+background: var(--code-bg, #f2f2f2);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+.calc-form label {
+display: block;
+margin-top: 1rem;
+font-weight: 600;
+font-size: 0.95rem;
+}
+.calc-form .unite {
+font-weight: 400;
+color: var(--secondary, #666);
+font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+display: block;
+width: 100%;
+max-width: 480px;
+margin-top: 0.3rem;
+padding: 0.4rem 0.6rem;
+border: 1px solid var(--border, #ccc);
+border-radius: 4px;
+font-size: 1rem;
+box-sizing: border-box;
+}
+.calc-form input.input-error { border-color: #c0392b; }
+.calc-form .error {
+margin-top: 0.5rem;
+color: #c0392b;
+font-size: 0.88rem;
+min-height: 1.2em;
+}
+.calc-form button {
+margin-top: 1.2rem;
+padding: 0.5rem 1.2rem;
+background: var(--primary, #333);
+color: #fff;
+border: none;
+border-radius: 4px;
+font-size: 1rem;
+cursor: pointer;
+}
+.calc-form button:hover { opacity: 0.85; }
+.calc-output {
+max-height: 0;
+overflow: hidden;
+opacity: 0;
+transition: max-height 0.5s ease, opacity 0.4s ease;
+background: var(--entry, #fafafa);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+margin-bottom: 2rem;
+}
+.calc-output.visible { max-height: 4000px; opacity: 1; }
+.calc-output-inner { padding: 1.2rem 1.5rem; }
+.btclose {
+display: inline-block;
+float: right;
+cursor: pointer;
+font-size: 1.2rem;
+line-height: 1;
+color: #c0392b;
+user-select: none;
+}
+.btclose::before { content: "✕"; }
+.calc-output table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; font-size: 0.9rem; }
+.calc-output th, .calc-output td { border: 1px solid var(--border, #ccc); padding: 0.3rem 0.6rem; text-align: right; }
+.calc-output th { background: var(--entry, #eee); text-align: center; }
+.calc-output dl { margin: 0.3rem 0; }
+.calc-output dd { margin-left: 1rem; }
+.calc-output dl.calc-error dd { color: #c0392b; }
+.calc-h2 { font-size: 1.6rem; font-weight: 700; margin: 1.2rem 0 0.6rem 0; line-height: 1.3; }
+.calc-h3 { font-size: 1.15rem; font-weight: 600; margin: 1rem 0 0.4rem 0; line-height: 1.3; }
+.chart-wrapper { position: relative; max-width: 640px; margin-top: 1rem; }
+.calc-abbrev p { margin: 0.15rem 0; }
+.calc-abbrev p:first-child { margin-bottom: 0.4rem; }
+@media print {
+body * { visibility: hidden !important; }
+.calc-output.visible,
+.calc-output.visible * { visibility: visible !important; }
+.calc-output.visible {
+position: absolute !important;
+top: 0 !important; left: 0 !important;
+width: 100% !important;
+border: none !important;
+max-height: none !important;
+overflow: visible !important;
+opacity: 1 !important;
+}
+.btclose { display: none !important; }
+}
+&lt;/style&gt;
+&lt;div class="calc-abbrev"&gt;
+&lt;p&gt;&lt;b&gt;Abréviations&amp;nbsp;:&lt;/b&gt;&lt;/p&gt;</description></item><item><title>Balistique extérieure — Le vol d'une flèche</title><link>https://123vincent.github.io/dans-le-mille/articles/balistique-exterieure/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/balistique-exterieure/</guid><description>Étude du vol d&amp;#39;une flèche : modèle mathématique, gravité, résistance de l&amp;#39;air, trajectoire parabolique et simulation tableur.</description></item><item><title>Calculateur — Graduation du viseur</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/graduation-viseur/</link><pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/graduation-viseur/</guid><description>&lt;style&gt;
+.calc-form {
+background: var(--code-bg, #f2f2f2);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+.calc-form label {
+display: block;
+margin-top: 1rem;
+font-weight: 600;
+font-size: 0.95rem;
+}
+.calc-form .unite {
+font-weight: 400;
+color: var(--secondary, #666);
+font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+display: block;
+width: 100%;
+max-width: 480px;
+margin-top: 0.3rem;
+padding: 0.4rem 0.6rem;
+border: 1px solid var(--border, #ccc);
+border-radius: 4px;
+font-size: 1rem;
+box-sizing: border-box;
+}
+.calc-form input.input-error { border-color: #c0392b; }
+.calc-form .error {
+margin-top: 0.5rem;
+color: #c0392b;
+font-size: 0.88rem;
+min-height: 1.2em;
+}
+.calc-form button {
+margin-top: 1.2rem;
+padding: 0.5rem 1.2rem;
+background: var(--primary, #333);
+color: #fff;
+border: none;
+border-radius: 4px;
+font-size: 1rem;
+cursor: pointer;
+}
+.calc-form button:hover { opacity: 0.85; }
+.calc-form ul.radio { list-style: none; padding: 0; margin-top: 1rem; display: flex; gap: 1.5rem; }
+.calc-form ul.radio li { display: flex; align-items: center; gap: 0.4rem; }
+.calc-output {
+max-height: 0;
+overflow: hidden;
+opacity: 0;
+transition: max-height 0.5s ease, opacity 0.4s ease;
+background: var(--entry, #fafafa);
+border: 1px solid var(--border, #ddd);
+border-radius: 8px;
+margin-bottom: 2rem;
+}
+.calc-output.visible { max-height: 6000px; opacity: 1; }
+.calc-output-inner { padding: 1.2rem 1.5rem; }
+.btclose {
+display: inline-block;
+float: right;
+cursor: pointer;
+font-size: 1.2rem;
+color: #c0392b;
+user-select: none;
+}
+.btclose::before { content: "✕"; }
+.calc-output table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; font-size: 0.9rem; }
+.calc-output th, .calc-output td { border: 1px solid var(--border, #ccc); padding: 0.3rem 0.6rem; text-align: right; }
+.calc-output th { background: var(--entry, #eee); text-align: center; }
+.calc-output dl { margin: 0.3rem 0; }
+.calc-output dt { font-weight: 600; margin-top: 0.5rem; }
+.calc-output dd { margin-left: 1rem; }
+.calc-output dl.calc-error dd { color: #c0392b; }
+.calc-h2 { font-size: 1.6rem; font-weight: 700; margin: 1.2rem 0 0.6rem 0; }
+.calc-h3 { font-size: 1.15rem; font-weight: 600; margin: 1rem 0 0.4rem 0; }
+.graduation-wrap {
+overflow-x: auto;
+margin: 1rem 0;
+padding: 0.5rem 0;
+}
+#graduation canvas {
+display: block;
+image-rendering: pixelated;
+}
+#graphe_1 {
+width: 100%;
+height: 260px;
+margin-top: 1rem;
+}
+@media print {
+body * { visibility: hidden !important; }
+.calc-output.visible,
+.calc-output.visible * { visibility: visible !important; }
+.calc-output.visible {
+position: absolute !important;
+top: 0 !important; left: 0 !important;
+width: 100% !important;
+border: none !important;
+max-height: none !important;
+overflow: visible !important;
+opacity: 1 !important;
+}
+.btclose { display: none !important; }
+}
+&lt;/style&gt;
+&lt;form name="form_1" id="form_1" autocomplete="off" class="calc-form"&gt;
+&lt;h2 id="graduation_du_viseur"&gt;Graduation du viseur&lt;/h2&gt;
+&lt;p&gt;Informations livrées&amp;nbsp;: tableau des valeurs, image de la graduation, courbe Position scope / Distance cible.&lt;/p&gt;</description></item><item><title>Viser bien, viser juste</title><link>https://123vincent.github.io/dans-le-mille/articles/reglage-viseur/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/reglage-viseur/</guid><description>Réglage du viseur sur un arc compound ou classique : alignement, ajustement mécanique, géométrie de visée et calcul de la graduation.</description></item><item><title>Calculateur — Viseur scope / œilleton</title><link>https://123vincent.github.io/dans-le-mille/calculateurs/viseur-scope-oeilleton/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/calculateurs/viseur-scope-oeilleton/</guid><description>&lt;style&gt;
+.calc-scope-drawing-wrap {
+width: 60%;
+max-width: 440px;
+}
+#drawing {
+width: 100%;
+position: relative;
+padding-bottom: 100%;
+}
+#container {
+position: absolute;
+left: 0; top: 0;
+width: 100%; height: 100%;
+background: #fff;
+border: 1px solid var(--border, #ccc);
+}
+.calc-scope-form {
+margin-top: 1.2em;
+padding: 30px 20px;
+}
+.calc-scope-form label.field-label {
+display: block;
+margin-top: 10px;
+font-weight: 700;
+cursor: default;
+}
+.calc-scope-form .unite {
+font-weight: 400;
+color: var(--secondary, #666);
+font-size: 0.85rem;
+}
+.calc-scope-form input[type="text"],
+.calc-scope-form select {
+display: block;
+width: 100%;
+max-width: 480px;
+margin: 5px 0 0;
+padding: 8px 7px;
+border: 1px solid #0885C7;
+border-radius: 5px;
+font-size: inherit;
+box-sizing: border-box;
+background: #f8f8f8;
+}
+.calc-scope-form input[type="text"]:focus {
+outline: 0;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px #0885C7;
+}
+.calc-scope-form .error-msg {
+background: #FF4200;
+color: #fff;
+border-radius: 5px;
+padding: 10px 8px;
+margin: 20px 0;
+font-size: 0.9rem;
+display: none;
+}
+.calc-scope-form .error-msg.visible { display: block; }
+.calc-scope-form button {
+display: block;
+margin-top: 20px;
+padding: 8px 15px;
+font-size: 1.1rem;
+font-weight: 700;
+background: linear-gradient(to bottom, #ffba00, #ffd564);
+border: 1px solid #9B7100;
+border-radius: 5px;
+cursor: pointer;
+color: #000;
+}
+.calc-scope-form button:hover { background-position: 0 -30px; }
+.calc-scope-form ul.radio {
+list-style: none;
+padding: 0;
+margin-top: 20px;
+}
+.calc-scope-form ul.radio input {
+display: inline-block;
+width: auto;
+margin: 0;
+border: 0;
+background: none;
+box-shadow: none;
+padding: 0;
+}
+.tabs {
+position: relative;
+margin-top: 20px;
+}
+.tabs input[name="tab"] { display: none; }
+.tab-label {
+text-transform: uppercase;
+font-size: 14px;
+color: #555;
+font-weight: 700;
+display: inline-block;
+width: 120px;
+padding: 5px 0;
+margin: 0;
+text-align: center;
+background: #ccc;
+border: 1px solid #bbb;
+border-radius: 10px 10px 0 0;
+border-bottom: 0;
+cursor: pointer;
+}
+.tab-label:hover { background: #eee; color: #666; }
+#tab-B:checked ~ label[for="tab-B"],
+#tab-B:not(:checked) ~ #tab-C:not(:checked) ~ label[for="tab-A"],
+#tab-C:checked ~ label[for="tab-C"] {
+background: #eee;
+}
+#tab-B:checked ~ label[for="tab-B"]::after,
+#tab-B:not(:checked) ~ #tab-C:not(:checked) ~ label[for="tab-A"]::after,
+#tab-C:checked ~ label[for="tab-C"]::after {
+position: absolute;
+content: "";
+margin: 5px 0 0;
+width: 118px;
+height: 5px;
+display: block;
+background: #eee;
+}
+.tab {
+padding: 25px;
+display: none;
+clear: both;
+border: 5px solid #bbb;
+border-radius: 20px;
+}
+.tabs #tab-B:checked ~ .tab:nth-of-type(2),
+.tabs #tab-B:not(:checked) ~ #tab-C:not(:checked) ~ .tab:nth-of-type(1),
+.tabs #tab-C:checked ~ .tab:nth-of-type(3) {
+display: block;
+}
+@media print {
+body * { visibility: hidden !important; }
+#drawing, #drawing * { visibility: visible !important; }
+#drawing {
+position: absolute !important;
+top: 0 !important; left: 0 !important;
+width: 100% !important;
+padding: 0 !important;
+height: 100vh !important;
+border: none !important;
+}
+#container {
+position: static !important;
+width: 100% !important;
+height: 100vh !important;
+}
+}
+&lt;/style&gt;
+&lt;h2 id="configuration"&gt;Configuration&amp;nbsp;: Scope&amp;nbsp;/ &amp;OElig;illeton&lt;/h2&gt;
+&lt;div class="calc-scope-drawing-wrap"&gt;
+&lt;div id="drawing" class="ratioWrapper vw100"&gt;
+&lt;div id="container"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Avec la souris ou le doigt (sur écran tactile), &lt;b&gt;Glissez &amp;amp; Déplacez&lt;/b&gt; le scope ou l'&amp;oelig;illeton sur le graphique ci-dessus.&lt;/p&gt;</description></item><item><title>Tirer sur un terrain en pente</title><link>https://123vincent.github.io/dans-le-mille/articles/balistique-terrain-pente/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/balistique-terrain-pente/</guid><description>Ajustement du modèle balistique pour un terrain en pente : projection de la pesanteur, rotation de repère, et estimation pratique de la correction de tir.</description></item><item><title>Le scope à la loupe</title><link>https://123vincent.github.io/dans-le-mille/articles/scope-lentille/</link><pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate><guid>https://123vincent.github.io/dans-le-mille/articles/scope-lentille/</guid><description>Analyse optique du système de visée sur un arc compound : champ de vision, vergence, grossissement, image inversée, visette correctrice.</description></item></channel></rss>

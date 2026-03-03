@@ -1,157 +1,19 @@
 /*!
- * dans-le-mille.fr - fonctions de calcul communes
- * Auteur: Vincent B. — Licence WTFPL http://www.wtfpl.net/
- */
-
-function round(value, decimals) {
-    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-}
-
-function maxGrad(value, step) {
-    return Math.ceil(value / step) * step;
-}
-
-function getMinTab(arr) {
-    return Math.min.apply(null, arr);
-}
-
-function getMaxTab(arr) {
-    return Math.max.apply(null, arr);
-}
-
-/**
- * Energie statique accumulée lors de l'armement de l'arc.
- * @param {number} band      - Brace height [inch]
- * @param {number} allonge   - Draw length [inch]
- * @param {Array}  forces    - Tableau de forces [lbs] (min 2 valeurs)
- * @returns {Array} Tableau d'objets {allonge, force, energie, cumul}
- */
-function getStaticEnergy(band, allonge, forces) {
-    var n = forces.length;
-    var step = (allonge - band) / (n - 1);
-    var result = new Array(n);
-
-    result[0] = { allonge: band, force: forces[0], energie: 0, cumul: 0 };
-
-    for (var i = 1; i < n; i++) {
-        var energie = 4.44973752 * (forces[i - 1] + forces[i]) / 2 * step * 0.0254;
-        result[i] = {
-            allonge: band + i * step,
-            force:   forces[i],
-            energie: energie,
-            cumul:   result[i - 1].cumul + energie
-        };
-    }
-    return result;
-}
-
-/**
- * Energie cinétique de la flèche.
- * @param {number} masse   - Masse de la flèche [grain]
- * @param {number} vitesse - Vitesse [fps]
- * @returns {number} Energie cinétique [joule]
- */
-function getKineticEnergy(masse, vitesse) {
-    var v_ms = 0.3048 * vitesse;
-    return (masse / 15.432) * 5e-4 * v_ms * v_ms;
-}
-
-/**
- * Efficacité de l'arc [%].
- * @param {number} win    - Energie statique [joule]
- * @param {number} masse  - Masse flèche [grain]
- * @param {number} vitesse - Vitesse flèche [fps]
- */
-function getBowEfficiency(win, masse, vitesse) {
-    return getKineticEnergy(masse, vitesse) / win * 100;
-}
-
-/**
- * Masse virtuelle de l'arc [grain].
- */
-function getVirtualMass(win, masse, vitesse) {
-    var wout = getKineticEnergy(masse, vitesse);
-    return masse * (win / wout - 1);
-}
-
-/**
- * Vitesse théorique pour une masse de flèche donnée [fps].
- * @param {number} win    - Energie statique [joule]
- * @param {number} masse  - Masse flèche de référence [grain]
- * @param {number} vitesse - Vitesse flèche de référence [fps]
- * @param {number} masseNouvelle - Masse flèche cible [grain]
- */
-function getArrowVelocity(win, masse, vitesse, masseNouvelle) {
-    var mk = getVirtualMass(win, masse, vitesse);
-    var m_kg  = masseNouvelle / 15.432 * 0.001;
-    var mk_kg = mk / 15.432 * 0.001;
-    return Math.sqrt(2 * win / (m_kg + mk_kg)) / 0.3048;
-}
-
-/**
- * Efficacité en masse [%] pour une masse de flèche donnée.
- */
-function getMassEfficiency(win, masse, vitesse, masseNouvelle) {
-    var mk = getVirtualMass(win, masse, vitesse);
-    return masseNouvelle / (masseNouvelle + mk) * 100;
-}
-
-/**
- * Graduation du viseur.
- */
-var getGradSight = function(a, e, f, d, c, b, m) {
-    var g  = 180 * Math.atan((c - f) / a) / Math.PI;
-    var k  = 1000 * d * Math.cos(Math.PI * (e + g) / 180);
-    d      = 1000 * d * Math.sin(Math.PI * (e + g) / 180);
-    a     *= 1000;
-    f      = 1000 * (c - f);
-    m      = (1000 * b * Math.sin(Math.PI * (m + g + e) / 180) - f) /
-             (1000 * b * Math.cos(Math.PI * (m + g + e) / 180) - a);
-    e      = -1 / ((d - 0) / (k - 0));
-    b      = d - e * k;
-    a      = (b - (f - m * a)) / (m - e);
-    e      = e * a + b;
-    return Math.sqrt((a - k) * (a - k) + (e - d) * (e - d));
-};
-
-/**
- * Interpolation spline cubique.
- * @param {Array} xs - Abscisses
- * @param {Array} ys - Ordonnées
- * @returns {Function} Fonction d'interpolation f(x)
- */
-var cubicSpline = function(xs, ys) {
-    var n = xs.length;
-    if (n !== ys.length) throw 'cubicSpline: xs et ys doivent avoir la même longueur.';
-
-    var idx = [];
-    for (var i = 0; i < n; i++) idx.push(i);
-    idx.sort(function(a, b) { return xs[a] < xs[b] ? -1 : 1; });
-
-    var x = [], y = [];
-    for (var i = 0; i < n; i++) { x.push(+xs[idx[i]]); y.push(+ys[idx[i]]); }
-
-    var c = [], d = [];
-    c[0] = 0; d[0] = 0;
-    for (var i = 1; i < n - 1; i++) {
-        var g = (x[i] - x[i-1]) / (x[i+1] - x[i-1]);
-        var m = g * d[i-1] + 2;
-        d[i] = (g - 1) / m;
-        c[i] = (y[i+1] - y[i]) / (x[i+1] - x[i]) - (y[i] - y[i-1]) / (x[i] - x[i-1]);
-        c[i] = (6 * c[i] / (x[i+1] - x[i-1]) - g * c[i-1]) / m;
-    }
-    d[n-1] = 0;
-    for (var i = n - 2; i >= 0; i--) d[i] = d[i] * d[i+1] + c[i];
-
-    return function(b) {
-        var lo = 0, hi = n - 1, mid;
-        do {
-            mid = hi - 1;
-            if (x[mid] > b) hi = mid; else lo = mid;
-        } while (hi - lo > 1);
-        var h  = x[hi] - x[lo];
-        var t  = (x[hi] - b) / h;
-        var u  = (b - x[lo]) / h;
-        return t * y[lo] + u * y[hi] + ((t*t*t - t) * d[lo] + (u*u*u - u) * d[hi]) * h * h / 6;
-    };
-};
+* dans-le-mille.fr - 2016.11.22 v1 @author: Vincent Behra, Vincent B.
+* Licence WTFPL http://www.wtfpl.net/
+*/
+function round(a,e){return Number(Math.round(a+"e"+e)+"e-"+e)}function maxGrad(a,e){return Math.ceil(a/e)*e}function getMinTab(a){return Math.min.apply(null,a)}function getMaxTab(a){return Math.max.apply(null,a)}
+/* includeHTML supprimé — non nécessaire dans Hugo */
+var getGradSight=function(a,e,f,d,c,b,m){var g=180*Math.atan((c-f)/a)/3.14159265359,k=1E3*d*Math.cos(3.14159265359*(e+g)/180);d=1E3*d*Math.sin(3.14159265359*(e+g)/180);a*=1E3;f=1E3*(c-f);m=(1E3*b*Math.sin(3.14159265359*(m+g+e)/180)-f)/(1E3*b*Math.cos(3.14159265359*(m+g+e)/180)-a);e=-1/((d-0)/(k-0));b=d-e*k;a=(b-(f-m*a))/(m-e);e=e*a+b;return Math.sqrt((a-k)*(a-k)+(e-d)*(e-d))};function getKineticEnergy(a,e){var f=.3048*e;return a/15.432*5E-4*f*f}
+function getBowEfficiency(a,e,f){return getKineticEnergy(e,f)/a*100}function getVirtualMass(a,e,f){f=getKineticEnergy(e,f);return e*(a/f-1)}function getArrowVelocity(a,e,f,d){d=d/15.432*.001;e=getVirtualMass(a,e,f)/15.432*.001;return Math.sqrt(2*a/(d+e))/.3048}function getMassEfficiency(a,e,f,d){a=getVirtualMass(a,e,f);return d/(d+a)*100}
+function getStaticEnergy(a,e,f){var d=Array(f.length);e=(e-a)/(f.length-1);d[0]=Array(4);d[0].allonge=a;d[0].force=f[0];d[0].energie=0;d[0].cumul=0;for(var c=1;c<d.length;c++)d[c]=Array(4),d[c].allonge=a+c*e,d[c].force=f[c],d[c].energie=4.44973752*(f[c-1]+f[c])/2*e*.0254,d[c].cumul=d[c-1].cumul+d[c].energie;return d}
+var Balistic=function(){var a=100,e=41,f=.00227,d=5.6547236E-5,c=0,b=50,m=.5,g={x:[],y:[],v:[]},k=Math.PI,h=[],n=[],q=[],r=[],u=0;Object.defineProperty(this,"Vo",{get:function(){return a},set:function(e){a=e}});Object.defineProperty(this,"angTir",{get:function(){return e},set:function(a){e=a}});Object.defineProperty(this,"m",{get:function(){return f},set:function(a){f=a}});Object.defineProperty(this,"cb",{get:function(){return d},set:function(a){d=a}});Object.defineProperty(this,"pente",{get:function(){return c},
+set:function(a){c=a}});Object.defineProperty(this,"distTir",{get:function(){return b},set:function(a){b=a}});Object.defineProperty(this,"tempsVol",{get:function(){return m},set:function(a){m=a}});Object.defineProperty(this,"points",{get:function(){g={x:[],y:[],v:[]};if(4<n.length)for(var a=cubicSpline(n,q),e=cubicSpline(n,r),d=(n[n.length-1]-n[0])/19,b=0;20>b;b++){var l=b*d,f=a(l),h=l*Math.sin(c*k/180)+f*Math.cos(c*k/180);g.x.push(l*Math.cos(c*k/180)-f*Math.sin(c*k/180));g.y.push(h);l=e(l);g.v.push(l)}else g.x.push(0),
+g.y.push(0),g.v.push(0);return g}});Object.defineProperty(this,"author",{get:function(){return window.atob("VmluY2VudEIu")}});var z=function(a,e,b,x,l){var w=Math.sqrt(x*x+l*l),A=.5*d*w*w,B=-x/w*A,g=-l/w*A,n=9.81*f,m=n*Math.cos(c*k/180*-1-k/2),q=n*Math.sin(c*k/180-k/2),r=(B+m)/f,t=(g+q)/f,v=r*u,z=t*u;h.push({tmp:a,x:e,y:b,vx:x,vy:l,v:w,fa:A,fax:B,fay:g,fg:n,fgx:m,fgy:q,ax:r,ay:t,dvx:v,dvy:z,dx:(x+v/2)*u,dy:(l+z/2)*u})},t=function(){var b=0,d=0,f=0,c=a*Math.cos(e*k/180),l=a*Math.sin(e*k/180);u=(l/
+9.81+Math.sqrt(l*l+0)/9.81)/1E3;n=[];q=[];r=[];z(b,d,f,c,l);n.push(d);q.push(f);var p=Math.sqrt(c*c+l*l);for(r.push(p);!(0>f)&&0!=u;)b+=u,d+=h[h.length-1].dx,f+=h[h.length-1].dy,c+=h[h.length-1].dvx,l+=h[h.length-1].dvy,z(b,d,f,c,l),n.push(d),q.push(f),p=Math.sqrt(c*c+l*l),r.push(p);if(b=0!=u&&C())b=!0;if(b){var b=h[h.length-1].y,d=h[h.length-2].y,g=h[h.length-1].vx,m=h[h.length-2].vx,p=h[h.length-1].vy,t=h[h.length-2].vy,f=h[h.length-1].tmp,c=h[h.length-2].tmp,l=h[h.length-2].x,l=l+d*(h[h.length-
+1].x-l)/(d-b);n[n.length-1]=l;q[q.length-1]=0;g=m+d*(g-m)/(d-b);p=t+d*(p-t)/(d-b);p=Math.sqrt(g*g+p*p);r[r.length-1]=p;return{distance:l,temps:c+d*(f-c)/(d-b),velocity:p}}n=[];q=[];r=[];return{distance:0,temps:0}},D=function(){return 0!=c?{min:0,max:45-c/2}:{min:0,max:45}},v=function(){var a=Math.round(1E3*b),d=D(),c=2,f=0;do{e=c;var l=t(),h=Math.round(1E3*l.distance);a<h?d.max=c:d.min=c;_angle={angle:c,temps:l.temps};c=(d.min+d.max)/2;f++}while(a!=h&&30>f);30<=f&&Math.round(1E4*_angle.angle)==Math.round(1E4*
+d.min)&&(_angle.alert="La distance de la cible "+b+"m est sup\u00e9rieure \u00e0 la port\u00e9e maximale de la fl\u00e8che.");return _angle},E=function(a){a=Math.round(1E3*a);var e=0,b=0,c=.01;d=.005;do{var f=v(),h=Math.round(1E3*f.temps);45<=f.angle||a<h?c=d:b=d;d=(b+c)/2;e++}while(a!=h&&30>e);return{iteration:e,ang:f.angle,tmp:f.temps}},C=function(){return!0};Balistic.prototype.getShot=function(){return t()};
+Balistic.prototype.getMaximum=function(){C();var a=0,d=-1;e=D().max;var b=t(),c=Math.round(1E3*b.distance);do{var f=c;e+=d;b=t();c=Math.round(1E3*b.distance);d=f<c?d*f/c:-d/2;b={angle:e,distance:b.distance,temps:b.temps};a++}while(f!=c&&30>a);30<=a&&(b.alert="D\u00e9passement des capacit\u00e9s de calcul !");return b};Balistic.prototype.getAngle=function(){return v()};Balistic.prototype.getVelocity=function(){var b=100/3.28084,d=400/3.28084,e=b,c=d,f=Math.round(1E3*m),h=0;a=100;do{var k=v(),g=Math.round(1E3*
+k.temps);f>g?c=a:e=a;k={vitesse:a,angle:k.angle};a=(e+c)/2;h++}while(f!=g&&30>h);30<=h&&(Math.round(1E4*k.vitesse)==Math.round(1E4*b)&&(k.alert="Vo < "+Math.round(3.28084*b)+" [fps], vitesse initiale hors limites ! (100 < Vo < 400 )"),Math.round(1E4*k.vitesse)==Math.round(1E4*d)&&(k.alert="Vo > "+Math.round(3.28084*d)+" [fps], vitesse initiale hors limites ! (100 < Vo < 400 )"));return k};Balistic.prototype.getCoefficientBalistic=function(){var e=E(m);if(30==e.iteration){var c,f=0;c=b/a/Math.cos(90*
+Math.asin(9.81*b/(a*a))/k*k/180);var h=c/2,l=c;do{var g=E(l);30!=g.iteration&&(f=g.tmp);l+=h}while(30>g.iteration);c="Ces param\u00e8tres n\u00e9cessitent un <b>temps de vol de la fl\u00e8che</b> compris entre : "+Math.round(1E4*c)/1E4+" s et "+Math.round(1E4*f)/1E4+" s."}return{cb:d,angle:e.ang,alert:c}}},cubicSpline=function(a,e){var f=a.length,d=[];if(f!=e.length)throw"Need an equal count of xs and ys.";for(var c=[],b=0;b<f;b++)c.push(b);c.sort(function(b,d){return a[b]<a[d]?-1:1});var m=a,g=e;
+a=[];e=[];for(b=0;b<f;b++)a.push(+m[c[b]]),e.push(+g[c[b]]);c=[];g=m=0;c[0]=0;d[0]=0;for(var b=1;b<f-1;b++)g=(a[b]-a[b-1])/(a[b+1]-a[b-1]),m=g*d[b-1]+2,d[b]=(g-1)/m,c[b]=(e[b+1]-e[b])/(a[b+1]-a[b])-(e[b]-e[b-1])/(a[b]-a[b-1]),c[b]=(6*c[b]/(a[b+1]-a[b-1])-g*c[b-1])/m;d[f-1]=0;for(b=f-2;0<=b;b--)d[b]=d[b]*d[b+1]+c[b];return function(b){var c,g,k,m;g=0;k=f-1;do c=k-1,a[c]>b?k=c:g=c,c=k-g;while(1<c);c=a[k]-a[g];m=(a[k]-b)/c;b=(b-a[g])/c;return y=m*e[g]+b*e[k]+((m*m*m-m)*d[g]+(b*b*b-b)*d[k])*c*c/6}};
