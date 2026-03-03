@@ -1,0 +1,225 @@
+<!-- Shortcode : Calculateur graduation du viseur -->
+
+<style>
+.calc-form {
+    background: var(--code-bg, #f2f2f2);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.calc-form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.calc-form .unite {
+    font-weight: 400;
+    color: var(--secondary, #666);
+    font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border, #ccc);
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.calc-form input.input-error { border-color: #c0392b; }
+.calc-form .error {
+    margin-top: 0.5rem;
+    color: #c0392b;
+    font-size: 0.88rem;
+    min-height: 1.2em;
+}
+.calc-form button {
+    margin-top: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--primary, #333);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.calc-form button:hover { opacity: 0.85; }
+.calc-form ul.radio { list-style: none; padding: 0; margin-top: 1rem; display: flex; gap: 1.5rem; }
+.calc-form ul.radio li { display: flex; align-items: center; gap: 0.4rem; }
+.calc-output {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease;
+    background: var(--entry, #fafafa);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.calc-output.visible { max-height: 6000px; opacity: 1; }
+.calc-output-inner   { padding: 1.2rem 1.5rem; }
+.btclose {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #c0392b;
+    user-select: none;
+}
+.btclose::before { content: "✕"; }
+.calc-output table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; font-size: 0.9rem; }
+.calc-output th, .calc-output td { border: 1px solid var(--border, #ccc); padding: 0.3rem 0.6rem; text-align: right; }
+.calc-output th { background: var(--entry, #eee); text-align: center; }
+.calc-output dl  { margin: 0.3rem 0; }
+.calc-output dt  { font-weight: 600; margin-top: 0.5rem; }
+.calc-output dd  { margin-left: 1rem; }
+.calc-output dl.calc-error dd { color: #c0392b; }
+.calc-h2 { font-size: 1.6rem; font-weight: 700; margin: 1.2rem 0 0.6rem 0; }
+.calc-h3 { font-size: 1.15rem; font-weight: 600; margin: 1rem 0 0.4rem 0; }
+.graduation-wrap {
+    overflow-x: auto;
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+}
+#graduation canvas {
+    display: block;
+    image-rendering: pixelated;
+}
+#graphe_1 {
+    width: 100%;
+    height: 260px;
+    margin-top: 1rem;
+}
+
+@media print {
+    body * { visibility: hidden !important; }
+    .calc-output.visible,
+    .calc-output.visible * { visibility: visible !important; }
+    .calc-output.visible {
+        position: absolute !important;
+        top: 0 !important; left: 0 !important;
+        width: 100% !important;
+        border: none !important;
+        max-height: none !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+    }
+    .btclose { display: none !important; }
+}
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 1 : Graduation du viseur                                       -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<form name="form_1" id="form_1" autocomplete="off" class="calc-form">
+    <h2 id="graduation_du_viseur">Graduation du viseur</h2>
+    <p>Informations livrées&nbsp;: tableau des valeurs, image de la graduation, courbe Position scope / Distance cible.</p>
+    <p>Respecter les unités indiquées.<br>(Exemple&nbsp;: 71&nbsp;cm × 0,3937 = 28&nbsp;pouces)</p>
+
+    <h3 id="parametres_de_tir">Paramètres de tir</h3>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <hr>
+    <h3 id="configuration_de_visee">Configuration de visée</h3>
+    <p style="text-align:center">
+        <a href="{{ "images/ParametresDeVisee.png" | relURL }}" target="_blank">
+            <img alt="Paramètres de visée" src="{{ "images/ParametresDeVisee.png" | relURL }}" style="max-width:100%;border-radius:4px;">
+        </a>
+    </p>
+
+    <label>Distance Sol&nbsp;– Encoche <span class="unite">[m]</span></label>
+    <input name="field_9" type="text" value="1.60">
+
+    <label>Distance Sol&nbsp;– Centre Cible <span class="unite">[m]</span></label>
+    <input name="field_10" type="text" value="1.30">
+
+    <label>Distance Encoche&nbsp;– Scope <span class="unite">[m]</span></label>
+    <input name="field_11" type="text" value="0.90">
+
+    <label>Distance Encoche&nbsp;– Visette <i>(ou &OElig;il)</i> <span class="unite">[m]</span></label>
+    <input name="field_12" type="text" value="0.17">
+
+    <label>Angle Corde <i>(ou &OElig;il)</i> <span class="unite">[°]</span></label>
+    <input name="field_13" type="text" value="41">
+
+    <ul class="radio">
+        <li><input type="radio" name="hander" id="right" checked> droitier</li>
+        <li><input type="radio" name="hander" id="left"> gaucher</li>
+    </ul>
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_1">Afficher Graduation</button>
+</form>
+
+<!-- Bloc résultats -->
+<div id="output_form_1" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Graduation du viseur <span id="close_output_form_1" class="btclose"></span></div>
+
+        <p style="text-align:center">
+            <a href="{{ "images/ParametresDeVisee.png" | relURL }}" target="_blank">
+                <img alt="Paramètres de visée" src="{{ "images/ParametresDeVisee.png" | relURL }}" style="max-width:100%;border-radius:4px;">
+            </a>
+        </p>
+
+        <div class="calc-h3">Configuration</div>
+        <div id="form_1_config"></div>
+
+        <div class="calc-h3">Résultats</div>
+        <div id="form_1_resultat"></div>
+
+        <div id="form_1_info" style="display:none">
+            <div class="calc-h3">Image de la graduation</div>
+            <div class="graduation-wrap">
+                <div id="graduation"></div>
+            </div>
+            <p><i>Faire un clic-droit sur l'image, puis «&nbsp;enregistrer l'image sous&nbsp;»</i></p>
+
+            <div class="calc-h3">Procédure pour imprimer cette graduation</div>
+            <ol>
+                <li>Clic-droit sur l'image de la graduation, puis «&nbsp;enregistrer l'image sous&nbsp;». Choisir son emplacement et éventuellement renommer l'image.</li>
+                <li>Ouvrir un éditeur de texte (ex. Word), puis insérer l'image dans le document.</li>
+                <li>Redimensionner l'image importée (clic-droit sur l'image et sélectionner «&nbsp;dimension et position&nbsp;»).</li>
+                <li>Modifier la <b>hauteur absolue</b> de l'image = <b>0,7&nbsp;cm</b>.</li>
+                <li>Cette valeur devra être ajustée selon le type d'imprimante et la configuration dont on dispose. Pour ce faire, procéder à des essais&nbsp;:</li>
+                <li>Imprimer le document et vérifier si la longueur mesurée de la graduation correspond à la <b>valeur maximale</b> figurant dans la colonne <b>graduation relative</b> du tableau ci-dessus.</li>
+                <li>Modifier si nécessaire les dimensions de l'image et répéter le point 6) jusqu'à obtenir une précision satisfaisante.</li>
+                <li>Puis insérer une feuille blanche autocollante dans l'imprimante et lancer l'impression définitive.</li>
+            </ol>
+
+            <div class="calc-h3">Procédure pour coller la graduation sur son viseur</div>
+            <ol>
+                <li>Découper la graduation qui vient d'être imprimée sur l'autocollant.</li>
+                <li>Dégraisser la surface du viseur sur laquelle viendra se coller la graduation.</li>
+                <li>Déplacer le coulisseau du viseur à une position connue correspondant à une distance de tir connue (ex.&nbsp;30&nbsp;m).</li>
+                <li>Coller la graduation autocollante en faisant correspondre le trait «&nbsp;30&nbsp;m&nbsp;» de l'étiquette avec la position de l'index du viseur.</li>
+            </ol>
+            <p>Ce travail demande minutie et précision&nbsp;; plusieurs essais seront peut-être nécessaires.</p>
+            <p>Contrôler les différentes distances lors des tirs d'entraînement. Au fur et à mesure des essais, affiner les paramètres de tir si des écarts sont constatés.</p>
+
+            <div class="calc-h3">Position scope / Distance cible</div>
+            <div id="graphe_1"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Dépendances JS ──────────────────────────────────────────────────────── -->
+<script src="{{ "js/vincentb.js" | relURL }}"></script>
+<script src="{{ "js/vincentb.graduation.js" | relURL }}"></script>
+<script src="{{ "js/vincentb.graphe.js" | relURL }}"></script>
+<script src="{{ "js/calc-graduation-viseur.js" | relURL }}"></script>

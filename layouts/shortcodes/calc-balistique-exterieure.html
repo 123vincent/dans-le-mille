@@ -1,0 +1,381 @@
+<!-- Shortcode : Calculateur balistique extérieure — 6 formulaires -->
+
+<style>
+/* ── Styles communs aux calculateurs (identiques à calc-efficacite-arc) ───── */
+.calc-section    { margin-bottom: 2.5rem; }
+.calc-form {
+    background: var(--code-bg, #f2f2f2);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.calc-form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.calc-form .unite {
+    font-weight: 400;
+    color: var(--secondary, #666);
+    font-size: 0.85rem;
+}
+.calc-form input[type="text"] {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border, #ccc);
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.calc-form input.input-error { border-color: #c0392b; }
+.calc-form .error {
+    margin-top: 0.5rem;
+    color: #c0392b;
+    font-size: 0.88rem;
+    min-height: 1.2em;
+}
+.calc-form button {
+    margin-top: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--primary, #333);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.calc-form button:hover { opacity: 0.85; }
+.calc-output {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease;
+    background: var(--entry, #fafafa);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.calc-output.visible { max-height: 4000px; opacity: 1; }
+.calc-output-inner   { padding: 1.2rem 1.5rem; }
+.btclose {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: #c0392b;
+    user-select: none;
+}
+.btclose::before { content: "✕"; }
+.calc-output table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; font-size: 0.9rem; }
+.calc-output th, .calc-output td { border: 1px solid var(--border, #ccc); padding: 0.3rem 0.6rem; text-align: right; }
+.calc-output th  { background: var(--entry, #eee); text-align: center; }
+.calc-output dl  { margin: 0.3rem 0; }
+.calc-output dd  { margin-left: 1rem; }
+.calc-output dl.calc-error dd { color: #c0392b; }
+.calc-h2 { font-size: 1.6rem; font-weight: 700; margin: 1.2rem 0 0.6rem 0; line-height: 1.3; }
+.calc-h3 { font-size: 1.15rem; font-weight: 600; margin: 1rem 0 0.4rem 0; line-height: 1.3; }
+.calc-abbrev p { margin: 0.15rem 0; }
+.calc-abbrev p:first-child { margin-bottom: 0.4rem; }
+.chart-wrapper { position: relative; max-width: 640px; margin-top: 1rem; }
+/* Ratio wrapper dynamique pour les graphiques trajectoires */
+.ratioWrapper { position: relative; width: 100%; }
+.ratioWrapper canvas { width: 100% !important; }
+
+@media print {
+    body * { visibility: hidden !important; }
+    .calc-output.visible,
+    .calc-output.visible * { visibility: visible !important; }
+    .calc-output.visible {
+        position: absolute !important;
+        top: 0 !important; left: 0 !important;
+        width: 100% !important;
+        border: none !important;
+        max-height: none !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+    }
+    .btclose { display: none !important; }
+}
+</style>
+
+<!-- ── Abréviations ───────────────────────────────────────────────────────── -->
+<div class="calc-abbrev">
+    <p><b>Abréviations&nbsp;:</b></p>
+    <p><b>Vo</b>&nbsp;: vitesse initiale [fps] <i>(pieds par seconde)</i></p>
+    <p><b>m</b>&nbsp;: poids de la flèche [gr] <i>(grain)</i></p>
+    <p><b>cb</b>&nbsp;: coefficient balistique [ ] <i>(pas d'unité)</i></p>
+    <p><b>angTir</b>&nbsp;: angle de tir [°] <i>(degré)</i></p>
+    <p><b>distTir</b>&nbsp;: distance de tir [m] <i>(mètre)</i></p>
+    <p><b>distMax</b>&nbsp;: distance maximale [m] <i>(mètre)</i></p>
+    <p><b>tempsVol</b>&nbsp;: temps de vol [s] <i>(seconde)</i></p>
+    <p><b>pente</b>&nbsp;: pente du terrain [°] <i>(degré)</i></p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 1 : Portée maximale                                            -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_1" id="form_1" autocomplete="off" class="calc-form">
+    <h2 id="portee_maximale">Portée maximale</h2>
+    <p><b>But&nbsp;:</b> déterminer la distance maximale de tir en fonction des paramètres initiaux.</p>
+    <p>Résultats livrés&nbsp;: angle de tir, distance maximale de tir, temps de vol.</p>
+    <p>Respecter les unités indiquées.<br>(Exemple&nbsp;: 22,7&nbsp;grammes × 15,432 = 350&nbsp;grains)</p>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_1">angTir / distMax / tempsVol</button>
+</form>
+
+<div id="output_form_1" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Portée maximale <span id="close_output_form_1" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_1_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_1_resultat"></p>
+        <div id="figure_1" style="display:none">
+            <div class="calc-h3">Trajectoire</div>
+            <div class="chart-wrapper">
+                <div id="ratio_1" class="ratioWrapper">
+                    <canvas id="graphe_1"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="form_1_info" style="display:none"></div>
+    </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 2 : Distance de tir                                            -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_2" id="form_2" autocomplete="off" class="calc-form">
+    <h2 id="distance_de_tir">Distance de tir</h2>
+    <p><b>But&nbsp;:</b> déterminer la distance de tir en fonction de l'angle de tir.</p>
+    <p>Résultats livrés&nbsp;: distance de tir, temps de vol.</p>
+    <p>Respecter les unités indiquées.</p>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <label>Angle de tir <span class="unite">[°]</span></label>
+    <input name="field_5" type="text" value="3.5">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_2">distTir / tempsVol</button>
+</form>
+
+<div id="output_form_2" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Distance de tir <span id="close_output_form_2" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_2_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_2_resultat"></p>
+        <div class="calc-h3">Énergie cinétique</div>
+        <div id="form_2_info"></div>
+    </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 3 : Angle de tir                                               -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_3" id="form_3" autocomplete="off" class="calc-form">
+    <h2 id="angle_de_tir">Angle de tir</h2>
+    <p><b>But&nbsp;:</b> déterminer l'angle de tir en fonction d'une distance de cible connue.</p>
+    <p>Résultats livrés&nbsp;: angle de tir, temps de vol.</p>
+    <p>Respecter les unités indiquées.</p>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <label>Distance de la cible <span class="unite">[m]</span></label>
+    <input name="field_6" type="text" value="50">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_3">angTir / tempsVol</button>
+</form>
+
+<div id="output_form_3" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Angle de tir <span id="close_output_form_3" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_3_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_3_resultat"></p>
+        <div class="calc-h3">Énergie cinétique</div>
+        <div id="form_3_info"></div>
+    </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 4 : Vitesse initiale                                           -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_4" id="form_4" autocomplete="off" class="calc-form">
+    <h2 id="vitesse_initiale_de_la_fleche">Vitesse initiale de la flèche</h2>
+    <p><b>But&nbsp;:</b> déterminer la vitesse initiale de la flèche en fonction d'une distance de cible connue et du temps de vol.</p>
+    <p>Résultats livrés&nbsp;: vitesse initiale de la flèche, angle de tir.</p>
+    <p>Respecter les unités indiquées.</p>
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <label>Distance de la cible <span class="unite">[m]</span></label>
+    <input name="field_6" type="text" value="50">
+
+    <label>Temps de vol de la flèche <span class="unite">[s]</span></label>
+    <input name="field_7" type="text" value="1.05">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_4">Vo / angTir</button>
+</form>
+
+<div id="output_form_4" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Vitesse initiale de la flèche <span id="close_output_form_4" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_4_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_4_resultat"></p>
+        <div class="calc-h3">Énergie cinétique</div>
+        <div id="form_4_info"></div>
+    </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 5 : Coefficient balistique                                     -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_5" id="form_5" autocomplete="off" class="calc-form">
+    <h2 id="coefficient_balistique_de_la_fleche">Coefficient balistique de la flèche</h2>
+    <p><b>But&nbsp;:</b> déterminer le coefficient balistique en fonction d'une distance de cible connue, du temps de vol et de la vitesse initiale.</p>
+    <p>Résultats livrés&nbsp;: coefficient balistique, angle de tir.</p>
+    <p>Respecter les unités indiquées.</p>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Distance de la cible <span class="unite">[m]</span></label>
+    <input name="field_6" type="text" value="50">
+
+    <label>Temps de vol de la flèche <span class="unite">[s]</span></label>
+    <input name="field_7" type="text" value="0.7">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_5">cb / angTir</button>
+</form>
+
+<div id="output_form_5" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Coefficient balistique de la flèche <span id="close_output_form_5" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_5_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_5_resultat"></p>
+        <div class="calc-h3">Énergie cinétique</div>
+        <div id="form_5_info"></div>
+    </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Formulaire 6 : Campagne / Field                                           -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="calc-section">
+<form name="form_6" id="form_6" autocomplete="off" class="calc-form">
+    <h2 id="campagne">Campagne / Field</h2>
+    <p><b>But&nbsp;:</b> calculer les angles de tir en fonction d'une liste de distances de tir.</p>
+    <p>Résultats livrés&nbsp;: angles de tir, temps de vol.</p>
+    <p>Respecter les unités indiquées.</p>
+
+    <label>Vitesse initiale <span class="unite">[fps = m/s × 3,28084]</span></label>
+    <input name="field_1" type="text" value="300">
+
+    <label>Poids de la flèche <span class="unite">[grain = gramme × 15,432]</span></label>
+    <input name="field_2" type="text" value="350">
+
+    <label>Coefficient balistique <span class="unite">[ ]</span></label>
+    <input name="field_3" type="text" value="0.000056547236">
+
+    <label>Pente du terrain <span class="unite">[°]</span></label>
+    <input name="field_4" type="text" value="0">
+
+    <label>Liste de distances de tir <span class="unite">[m]</span></label>
+    <input name="field_8" type="text" value="5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70">
+
+    <div class="error"></div>
+    <button type="button" id="bt_form_6">angTir / tempsVol</button>
+</form>
+
+<div id="output_form_6" class="calc-output">
+    <div class="calc-output-inner">
+        <div class="calc-h2">Campagne / Field <span id="close_output_form_6" class="btclose"></span></div>
+        <div class="calc-h3">Configuration</div>
+        <p id="form_6_config"></p>
+        <div class="calc-h3">Résultats</div>
+        <p id="form_6_resultat"></p>
+        <div id="figure_6" style="display:none">
+            <div class="calc-h3">Angle de tir en fonction de la distance</div>
+            <div class="chart-wrapper">
+                <canvas id="graphe_6"></canvas>
+            </div>
+        </div>
+        <div id="form_6_info" style="display:none"></div>
+    </div>
+</div>
+</div>
+
+<!-- ── Dépendances JS ──────────────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="{{ "js/vincentb.js" | relURL }}"></script>
+<script src="{{ "js/calc-balistique-exterieure.js" | relURL }}"></script>

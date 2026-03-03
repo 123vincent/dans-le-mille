@@ -1,0 +1,268 @@
+<!-- Shortcode : Viseur scope / œilleton -->
+
+<style>
+/* ── Zone de dessin Konva ────────────────────────────────────────────────── */
+.calc-scope-drawing-wrap {
+    width: 60%;
+    max-width: 440px;
+}
+#drawing {
+    width: 100%;
+    position: relative;
+    padding-bottom: 100%; /* ratio 1:1 */
+}
+#container {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: #fff;
+    border: 1px solid var(--border, #ccc);
+}
+
+/* ── Formulaire ──────────────────────────────────────────────────────────── */
+.calc-scope-form {
+    margin-top: 1.2em;
+    padding: 30px 20px;
+}
+.calc-scope-form label.field-label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 700;
+    cursor: default;
+}
+.calc-scope-form .unite {
+    font-weight: 400;
+    color: var(--secondary, #666);
+    font-size: 0.85rem;
+}
+.calc-scope-form input[type="text"],
+.calc-scope-form select {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin: 5px 0 0;
+    padding: 8px 7px;
+    border: 1px solid #0885C7;
+    border-radius: 5px;
+    font-size: inherit;
+    box-sizing: border-box;
+    background: #f8f8f8;
+}
+.calc-scope-form input[type="text"]:focus {
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px #0885C7;
+}
+.calc-scope-form .error-msg {
+    background: #FF4200;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 8px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    display: none;
+}
+.calc-scope-form .error-msg.visible { display: block; }
+
+.calc-scope-form button {
+    display: block;
+    margin-top: 20px;
+    padding: 8px 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #ffba00, #ffd564);
+    border: 1px solid #9B7100;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #000;
+}
+.calc-scope-form button:hover { background-position: 0 -30px; }
+
+.calc-scope-form ul.radio {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+.calc-scope-form ul.radio input {
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* ── Tabs : copie exacte de styles.css ───────────────────────────────────── */
+.tabs {
+    position: relative;
+    margin-top: 20px;
+}
+.tabs input[name="tab"] { display: none; }
+
+.tab-label {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #555;
+    font-weight: 700;
+    display: inline-block;
+    width: 120px;
+    padding: 5px 0;
+    margin: 0;
+    text-align: center;
+    background: #ccc;
+    border: 1px solid #bbb;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 0;
+    cursor: pointer;
+}
+.tab-label:hover { background: #eee; color: #666; }
+
+/* Onglet actif — reproduit exactement les sélecteurs de styles.css */
+#tab-B:checked ~ label[for="tab-B"],
+#tab-B:not(:checked) ~ #tab-C:not(:checked) ~ label[for="tab-A"],
+#tab-C:checked ~ label[for="tab-C"] {
+    background: #eee;
+}
+#tab-B:checked ~ label[for="tab-B"]::after,
+#tab-B:not(:checked) ~ #tab-C:not(:checked) ~ label[for="tab-A"]::after,
+#tab-C:checked ~ label[for="tab-C"]::after {
+    position: absolute;
+    content: "";
+    margin: 5px 0 0;
+    width: 118px;
+    height: 5px;
+    display: block;
+    background: #eee;
+}
+
+.tab {
+    padding: 25px;
+    display: none;
+    clear: both;
+    border: 5px solid #bbb;
+    border-radius: 20px;
+}
+/* Affichage panels — reproduit exactement les sélecteurs de styles.css */
+.tabs #tab-B:checked ~ .tab:nth-of-type(2),
+.tabs #tab-B:not(:checked) ~ #tab-C:not(:checked) ~ .tab:nth-of-type(1),
+.tabs #tab-C:checked ~ .tab:nth-of-type(3) {
+    display: block;
+}
+
+/* ── Mode impression ─────────────────────────────────────────────────────── */
+@media print {
+    body * { visibility: hidden !important; }
+    #drawing, #drawing * { visibility: visible !important; }
+    #drawing {
+        position: absolute !important;
+        top: 0 !important; left: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        height: 100vh !important;
+        border: none !important;
+    }
+    #container {
+        position: static !important;
+        width: 100% !important;
+        height: 100vh !important;
+    }
+}
+</style>
+
+<!-- ── Zone de dessin (Konva) ─────────────────────────────────────────────── -->
+<h2 id="configuration">Configuration&nbsp;: Scope&nbsp;/ &OElig;illeton</h2>
+<div class="calc-scope-drawing-wrap">
+    <div id="drawing" class="ratioWrapper vw100">
+        <div id="container"></div>
+    </div>
+</div>
+<p>Avec la souris ou le doigt (sur écran tactile), <b>Glissez &amp; Déplacez</b> le scope ou l'&oelig;illeton sur le graphique ci-dessus.</p>
+
+<!-- ── Formulaire ─────────────────────────────────────────────────────────── -->
+<form name="form_1" id="form_1" autocomplete="off" class="calc-scope-form">
+    <h2 id="parametrer">Paramétrage cible, scope, &oelig;illeton</h2>
+    <ul>
+        <li>Respecter les unités indiquées.<br>(Exemple&nbsp;: 711&nbsp;mm = 28&nbsp;pouces × 25,4)</li>
+        <li>Configuration des couleurs au format HEX&nbsp;: <a href="http://htmlcolorcodes.com/fr/" rel="nofollow" target="_blank">htmlcolorcodes.com</a></li>
+    </ul>
+    <hr>
+
+    <!-- Sélecteur Compound / Recurve -->
+    <ul class="radio mbm">
+        <li><input id="radio_1" name="selector" type="radio" data-id="tab-B" checked> <b>Scope</b> sur un arc à poulies (Compound)</li>
+        <li><input id="radio_2" name="selector" type="radio" data-id="tab-C"> <b>&OElig;illeton</b> sur un arc classique (Recurve)</li>
+    </ul>
+
+    <!-- Tabs : structure IDENTIQUE à l'original -->
+    <!-- input[name=tab] + label + label + label + .tab + .tab + .tab = frères directs -->
+    <section class="tabs">
+        <input name="tab" id="tab-A" type="radio" checked>
+        <input name="tab" id="tab-B" type="radio">
+        <input name="tab" id="tab-C" type="radio">
+        <label class="tab-label" for="tab-A">Target</label><!--
+        --><label class="tab-label" for="tab-B" id="label-compound">Compound</label><!--
+        --><label class="tab-label" for="tab-C" id="label-sight" style="display:none">Recurve</label>
+
+        <!-- Tab 1 : Target -->
+        <div class="tab">
+            <ul class="radio">
+                <li><input id="checkbox_5" name="display" type="checkbox" checked>&nbsp;avec/sans numérotation.</li>
+            </ul>
+            <label class="field-label">Type de blason</label>
+            <select name="targetTyp" id="targetTyp"></select>
+            <label class="field-label">Distance de la cible <span class="unite">[m]</span></label>
+            <input name="field_1" type="text" value="40">
+        </div>
+
+        <!-- Tab 2 : Compound (Scope) -->
+        <div class="tab">
+            <ul class="radio">
+                <li><input id="checkbox_1" name="display" type="checkbox" checked>&nbsp;avec/sans lentille,</li>
+                <li><input id="checkbox_2" name="display" type="checkbox" checked>&nbsp;avec/sans point de visée.</li>
+            </ul>
+            <label class="field-label">&empty; int. du scope <span class="unite">[mm]</span></label>
+            <input id="field_2" name="field_2" type="text" value="33">
+            <label class="field-label">&empty; ext. du scope <span class="unite">[mm]</span></label>
+            <input name="field_3" type="text" value="40">
+            <label class="field-label">Couleur du scope <span class="unite">[hex]</span></label>
+            <input name="field_4" type="text" value="#086ca2">
+            <label class="field-label">Distance &oelig;il-scope <span class="unite">[m]</span></label>
+            <input name="field_5" type="text" value="0.78">
+            <label class="field-label">Lentille <span class="unite">[dioptrie]</span></label>
+            <input name="field_6" type="text" value="0.72">
+            <label class="field-label">&empty; int. du point de visée <span class="unite">[mm]</span></label>
+            <input id="field_7" name="field_7" type="text" value="0">
+            <label class="field-label">&empty; ext. du point de visée <span class="unite">[mm]</span></label>
+            <input name="field_8" type="text" value="2">
+            <label class="field-label">Couleur du point de visée <span class="unite">[hex]</span></label>
+            <input name="field_9" type="text" value="#ff2a00">
+        </div>
+
+        <!-- Tab 3 : Recurve (Œilleton) -->
+        <div class="tab">
+            <ul class="radio">
+                <li><input id="checkbox_4" name="display" type="checkbox" checked>&nbsp;avec/sans point de visée.</li>
+            </ul>
+            <label class="field-label">&empty; int. de l'&oelig;illeton <span class="unite">[mm]</span></label>
+            <input id="field_10" name="field_10" type="text" value="8">
+            <label class="field-label">&empty; ext. de l'&oelig;illeton <span class="unite">[mm]</span></label>
+            <input name="field_11" type="text" value="10">
+            <label class="field-label">Couleur de l'&oelig;illeton <span class="unite">[hex]</span></label>
+            <input name="field_12" type="text" value="#086ca2">
+            <label class="field-label">Distance &oelig;il-&oelig;illeton <span class="unite">[m]</span></label>
+            <input name="field_13" type="text" value="1.0">
+            <label class="field-label">&empty; du point de visée <span class="unite">[mm]</span></label>
+            <input name="field_14" type="text" value="1">
+            <label class="field-label">Couleur du point de visée <span class="unite">[hex]</span></label>
+            <input name="field_15" type="text" value="#ff2a00">
+        </div>
+
+    </section>
+
+    <div class="error-msg" id="form_1_errors"></div>
+    <button type="button" id="bt_form_1">Modifier</button>
+</form>
+
+<!-- ── Dépendances JS ──────────────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/konva@9/konva.min.js"></script>
+<script src="{{ "js/calc-viseur-scope.js" | relURL }}"></script>
