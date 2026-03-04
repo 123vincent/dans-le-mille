@@ -3,19 +3,31 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/calculateurs/efficacite-arc/</loc>
-    <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/articles/arc-compound/</loc>
     <lastmod>2026-02-26T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/calculateurs/balistique/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/articles/efficacite-arc/</loc>
     <lastmod>2026-02-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/calculateurs/balistique-terrain-pente/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/articles/balistique-exterieure/</loc>
     <lastmod>2026-03-02T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/calculateurs/graduation-viseur/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/articles/reglage-viseur/</loc>
     <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/calculateurs/viseur-scope-oeilleton/</loc>
+    <lastmod>2024-01-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/articles/balistique-terrain-pente/</loc>
     <lastmod>2026-03-02T00:00:00+00:00</lastmod>
@@ -24,10 +36,10 @@
     <lastmod>2026-03-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/calculateurs/</loc>
-    <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/allonge/</loc>
     <lastmod>2026-02-26T00:00:00+00:00</lastmod>

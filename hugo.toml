@@ -1,6 +1,6 @@
 baseURL = "https://123vincent.github.io/dans-le-mille/"
 languageCode = "fr-FR"
-title = "Dans le mille"
+title = "dans le mille"
 theme = "PaperMod"
   
 [params]
