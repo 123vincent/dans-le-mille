@@ -69,3 +69,10 @@ body, .post-content {
 .post-content p:has(+ figure.img-right) {
   overflow: hidden;
 }
+
+.logo a,
+.logo a span {
+    font-family: "DJB Messy Amanda Goes Bold", cursive !important;
+    font-size: 2rem !important;
+    font-weight: normal !important;
+}
